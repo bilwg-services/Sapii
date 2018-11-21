@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "544719784740",
+    "firebase_url": "https://sapii-d4d04.firebaseio.com",
+    "project_id": "sapii-d4d04",
+    "storage_bucket": "sapii-d4d04.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544719784740:android:18b86c7c383b347c",
+        "android_client_info": {
+          "package_name": "com.deucate.sapii"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "544719784740-ajmrd75u0v596r6tplr9cprsi8ea7h8l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deucate.sapii",
+            "certificate_hash": "47938b70486cbffacda9cdb93e4673feca0adf90"
+          }
+        },
+        {
+          "client_id": "544719784740-l5giq0tidb9v5f13cutlcp55vd5885j3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACWCqYRWAkGfWmC8y6u03Rb8WbabzsXMU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "544719784740-l5giq0tidb9v5f13cutlcp55vd5885j3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
