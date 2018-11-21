@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
+import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
 import com.deucate.sapii.util.Utils
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -13,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import kotlinx.android.synthetic.main.activity_login.view.*
+import kotlinx.android.synthetic.main.dialoge_edittext.view.*
 import org.koin.android.architecture.ext.viewModel
 
 class LoginActivity : AppCompatActivity() {
@@ -33,15 +37,45 @@ class LoginActivity : AppCompatActivity() {
             startHomeActivity()
         }
         setContentView(R.layout.activity_login)
-        viewModel.auth.value = auth
         val rootView = layoutInflater.inflate(R.layout.activity_login, null)
 
         googleSignInClient = GoogleSignIn.getClient(
-            this, GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                this, GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build()
         )
+
+        viewModel.isUserFirstTimer.observe(this, Observer {
+            if (it) {
+                utils.showToastMessage(viewModel.userName.value!!)
+                startHomeActivity()
+            } else {
+                val dialogView = layoutInflater.inflate(R.layout.dialoge_edittext, null)
+                AlertDialog.Builder(this).setTitle("referral Code").setMessage("Enter referral code here.").setView(dialogView).setPositiveButton("Done") { _, _ ->
+                    val referralCode = dialogView.edit1.text.toString()
+                    if (TextUtils.isEmpty(referralCode)) {
+                        startHomeActivity()
+                    } else {
+                        viewModel.addReferralCode(referralCode)
+                    }
+                }.show()
+            }
+        })
+
+        viewModel.error.observe(this, Observer {
+            if (it == null) {
+                startHomeActivity()
+            } else {
+                utils.showAlertDialog("Error", it)
+            }
+        })
+
+        viewModel.userName.observe(this, Observer {
+            if (it != null) {
+                utils.showToastMessage(it)
+            }
+        })
 
         rootView.googleSignInButton.setOnClickListener {
             startActivityForResult(googleSignInClient.signInIntent, signIn)
@@ -73,13 +107,13 @@ class LoginActivity : AppCompatActivity() {
     private fun signInToFirebase(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    startHomeActivity()
-                } else {
-                    utils.showAlertDialog("Error", task.exception!!.localizedMessage)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        viewModel.checkUserFirstTimer(task.result!!.user.uid)
+                    } else {
+                        utils.showAlertDialog("Error", task.exception!!.localizedMessage)
+                    }
                 }
-            }
     }
 
 
