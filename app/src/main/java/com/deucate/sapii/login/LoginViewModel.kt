@@ -1,13 +1,14 @@
-package com.deucate.sapii
+package com.deucate.sapii.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.deucate.sapii.Constants
 import com.google.firebase.firestore.FirebaseFirestore
 import java.lang.NullPointerException
 
 class LoginViewModel : ViewModel() {
 
-    val isUserFirstTimer = MutableLiveData<Boolean>()
+    val isUserFirstTimer = MutableLiveData<Boolean?>()
     val userName = MutableLiveData<String?>()
     val error = MutableLiveData<String?>()
 

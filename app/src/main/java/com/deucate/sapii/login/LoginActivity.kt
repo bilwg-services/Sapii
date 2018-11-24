@@ -1,4 +1,4 @@
-package com.deucate.sapii
+package com.deucate.sapii.login
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,6 +7,9 @@ import android.os.Bundle
 import android.text.TextUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.deucate.sapii.MainActivity
+import com.deucate.sapii.R
 import com.deucate.sapii.util.Utils
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -15,13 +18,12 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import kotlinx.android.synthetic.main.activity_login.view.*
+import com.google.android.gms.common.SignInButton
 import kotlinx.android.synthetic.main.dialoge_edittext.view.*
-import org.koin.android.architecture.ext.viewModel
 
 class LoginActivity : AppCompatActivity() {
 
-    private val viewModel by viewModel<LoginViewModel>()
+    private lateinit var viewModel: LoginViewModel
     private val auth = FirebaseAuth.getInstance()
 
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -33,11 +35,15 @@ class LoginActivity : AppCompatActivity() {
     @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         if (auth.currentUser != null) {
             startHomeActivity()
         }
         setContentView(R.layout.activity_login)
-        val rootView = layoutInflater.inflate(R.layout.activity_login, null)
+
+        findViewById<SignInButton>(R.id.signInButton).setOnClickListener {
+            startActivityForResult(googleSignInClient.signInIntent, signIn)
+        }
 
         googleSignInClient = GoogleSignIn.getClient(
                 this, GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -47,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
         )
 
         viewModel.isUserFirstTimer.observe(this, Observer {
-            if (it) {
+            if (it!!) {
                 utils.showToastMessage(viewModel.userName.value!!)
                 startHomeActivity()
             } else {
@@ -77,14 +83,10 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-        rootView.googleSignInButton.setOnClickListener {
-            startActivityForResult(googleSignInClient.signInIntent, signIn)
-        }
-
     }
 
     private fun startHomeActivity() {
-        startActivity(Intent(this, HomeActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 

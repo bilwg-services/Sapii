@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Sapii</string>
+    <string name="title_home">Home</string>
+    <string name="title_invite">Invite</string>
+    <string name="title_payout">Payout</string>
+    <string name="title_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="long_text">Single line text view that scrolls automatically if the text is too long to fit in the widget</string>
 </resources>
