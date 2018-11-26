@@ -1,1 +1,2 @@
-include ':app'
+include ':app', ':spinLibrary'
+project(':spinLibrary').projectDir = new File('library')

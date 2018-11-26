@@ -7,5 +7,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="long_text">Single line text view that scrolls automatically if the text is too long to fit in the widget</string>
+    <string name="long_text">Single line text view that scrolls automatically if the text is too long to fit in the
+        widget
+    </string>
 </resources>
