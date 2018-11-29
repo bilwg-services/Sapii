@@ -11,14 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.deucate.sapii.MainActivity
 import com.deucate.sapii.R
+import com.deucate.sapii.spinner.SpinActivity
 import com.deucate.sapii.util.Utils
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 class HomeFragment : Fragment() {
 
-    private lateinit var viewModel:HomeViewModel
+    private lateinit var viewModel: HomeViewModel
 
     private lateinit var utils: Utils
 
@@ -44,7 +44,7 @@ class HomeFragment : Fragment() {
             adapter.notifyDataSetChanged()
         })
 
-        viewModel.modules.value!!.add(Module("Spin to earn credits", "Per hour get unlimited points with spins.", R.drawable.spin_win, MainActivity::class.java as Class<*>))
+        addModule()
 
         viewModel.activityToStart.observe(this, Observer {
             activity!!.startActivity(it)
@@ -59,6 +59,51 @@ class HomeFragment : Fragment() {
         })
 
         return rootView
+    }
+
+    private fun addModule() {
+        viewModel.modules.value!!.add(
+            Module(
+                "Spin to earn credits",
+                "Per hour get unlimited points with spins.",
+                R.drawable.spin_win,
+                SpinActivity::class.java as Class<*>
+            )
+        )
+        viewModel.modules.value!!.add(
+            Module(
+                "Scratch to earn credits",
+                "Per hour get unlimited points with scratch..",
+                R.drawable.scartch_icon,
+                SpinActivity::class.java as Class<*>
+            )
+        )
+        viewModel.modules.value!!.add(
+            Module(
+                "Watch video",
+                "Every 30 min to watch full video and get full credit.",
+                R.drawable.spin_win,
+                SpinActivity::class.java as Class<*>
+            )
+        )
+
+        viewModel.modules.value!!.add(
+            Module(
+                "Share to earn credit",
+                "Every share get 30 credit",
+                R.drawable.spin_win,
+                SpinActivity::class.java as Class<*>
+            )
+        )
+
+        viewModel.modules.value!!.add(
+            Module(
+                "Share on Facebook Timeline",
+                "Share on Facebook with your friends",
+                R.drawable.spin_win,
+                SpinActivity::class.java as Class<*>
+            )
+        )
     }
 
 

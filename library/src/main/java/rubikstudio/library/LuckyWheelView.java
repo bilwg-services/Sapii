@@ -12,10 +12,6 @@ import rubikstudio.library.model.LuckyItem;
 
 import java.util.List;
 
-/**
- * Created by kiennguyen on 11/5/16.
- */
-
 public class LuckyWheelView extends RelativeLayout implements PielView.PieRotateListener {
     private int mBackgroundColor;
     private int mTextColor;
@@ -53,7 +49,6 @@ public class LuckyWheelView extends RelativeLayout implements PielView.PieRotate
     }
 
     /**
-     *
      * @param ctx
      * @param attrs
      */
@@ -100,7 +95,6 @@ public class LuckyWheelView extends RelativeLayout implements PielView.PieRotate
     }
 
     /**
-     *
      * @param data
      */
     public void setData(List<LuckyItem> data) {
@@ -108,7 +102,6 @@ public class LuckyWheelView extends RelativeLayout implements PielView.PieRotate
     }
 
     /**
-     *
      * @param numberOfRound
      */
     public void setRound(int numberOfRound) {
