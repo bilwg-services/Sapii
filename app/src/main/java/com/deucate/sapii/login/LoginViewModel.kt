@@ -31,21 +31,19 @@ class LoginViewModel : ViewModel() {
     fun addReferralCode(referralCode: String) {
         val notExistsError = "Not found referral code."
 
-        db.collection(constants.Path_Users).whereEqualTo(constants.Referral_Code, referralCode).get()
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    for (doc in it.result!!) {
-                        val updatedPoint = try {
-                            doc.getLong(constants.points)!!.toInt() + constants.Referral_Point
-                        } catch (e: NullPointerException) {
-                            constants.Referral_Point
-                        }
-                        addThePoints(doc.id, updatedPoint)
-                    }
-                } else {
-                    error.value = notExistsError
+        db.collection(constants.Path_Users).document(referralCode).get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                val doc = it.result!!
+                val updatedPoint = try {
+                    doc.getLong(constants.points)!!.toInt() + constants.Referral_Point
+                } catch (e: NullPointerException) {
+                    constants.Referral_Point
                 }
+                addThePoints(doc.id, updatedPoint)
+            } else {
+                error.value = notExistsError
             }
+        }
     }
 
     private fun addThePoints(uid: String, points: Int) {
