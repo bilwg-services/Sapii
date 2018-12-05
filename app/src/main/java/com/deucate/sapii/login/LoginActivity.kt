@@ -8,6 +8,7 @@ import android.text.TextUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.deucate.sapii.Constants
 import com.deucate.sapii.MainActivity
 import com.deucate.sapii.R
 import com.deucate.sapii.util.Utils
@@ -20,6 +21,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.SignInButton
 import kotlinx.android.synthetic.main.dialoge_edittext.view.*
+import java.util.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -29,6 +31,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
 
     private val utils = Utils(this)
+    private val constants = Constants()
 
     private val signIn: Int = 69
 
@@ -46,26 +49,31 @@ class LoginActivity : AppCompatActivity() {
         }
 
         googleSignInClient = GoogleSignIn.getClient(
-                this, GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            this, GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build()
         )
 
         viewModel.isUserFirstTimer.observe(this, Observer {
-            if (it!!) {
-                utils.showToastMessage(viewModel.userName.value!!)
+            if (!it!!) {
+                if (viewModel.userName.value != null) {
+                    utils.showToastMessage(viewModel.userName.value!!)
+                }
                 startHomeActivity()
             } else {
+                addData()
+
                 val dialogView = layoutInflater.inflate(R.layout.dialoge_edittext, null)
-                AlertDialog.Builder(this).setTitle("referral Code").setMessage("Enter referral code here.").setView(dialogView).setPositiveButton("Done") { _, _ ->
-                    val referralCode = dialogView.edit1.text.toString()
-                    if (TextUtils.isEmpty(referralCode)) {
-                        startHomeActivity()
-                    } else {
-                        viewModel.addReferralCode(referralCode)
-                    }
-                }.show()
+                AlertDialog.Builder(this).setTitle("referral Code").setMessage("Enter referral code here.")
+                    .setView(dialogView).setPositiveButton("Done") { _, _ ->
+                        val referralCode = dialogView.edit1.text.toString()
+                        if (TextUtils.isEmpty(referralCode)) {
+                            startHomeActivity()
+                        } else {
+                            viewModel.addReferralCode(referralCode)
+                        }
+                    }.show()
             }
         })
 
@@ -83,6 +91,23 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun addData() {
+        val currentUser = auth.currentUser ?: return
+        val inviteID = UUID.randomUUID().toString()
+
+        var contact = currentUser.email
+        if (contact == null || contact == "")
+            contact = currentUser.phoneNumber
+
+        val data = HashMap<String, Any?>()
+        data[constants.user_name] = currentUser.displayName
+        data[constants.contact] = contact
+        data[constants.inviteID] = inviteID
+        data[constants.points] = 0
+
+        viewModel.addNewData(data)
     }
 
     private fun startHomeActivity() {
@@ -109,13 +134,13 @@ class LoginActivity : AppCompatActivity() {
     private fun signInToFirebase(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         auth.signInWithCredential(credential)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        viewModel.checkUserFirstTimer(task.result!!.user.uid)
-                    } else {
-                        utils.showAlertDialog("Error", task.exception!!.localizedMessage)
-                    }
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    viewModel.checkUserFirstTimer(task.result!!.user.uid)
+                } else {
+                    utils.showAlertDialog("Error", task.exception!!.localizedMessage)
                 }
+            }
     }
 
 

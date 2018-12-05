@@ -12,7 +12,7 @@ class ModuleAdapter(private val viewModel: HomeViewModel) : RecyclerView.Adapter
     lateinit var listner: OnCallBack
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModuleViewHolder {
-        return ModuleViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_module, null))
+        return ModuleViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.card_module,parent, false))
     }
 
     override fun getItemCount(): Int {

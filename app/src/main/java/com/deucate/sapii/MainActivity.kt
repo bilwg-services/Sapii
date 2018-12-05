@@ -2,34 +2,42 @@ package com.deucate.sapii
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.deucate.sapii.home.HomeFragment
+import com.deucate.sapii.invite.InviteFragment
+import com.deucate.sapii.payout.PayoutFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    private val currentFragment = MutableLiveData<Fragment?>()
+    private val currentTitle = MutableLiveData<String?>()
+    private var title = String()
 
     @SuppressLint("InflateParams")
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                supportActionBar!!.title = "Home"
-                val fragment = HomeFragment()
-                checkAndLoadFragment(fragment)
+                currentTitle.value = "Home"
+                currentFragment.value = HomeFragment()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_invite -> {
-                supportActionBar!!.title = "Invite"
+                currentTitle.value = "Invite"
+                currentFragment.value = InviteFragment()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_payout -> {
-                supportActionBar!!.title = "Payout"
+                currentTitle.value = "Payout"
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_settings -> {
-                supportActionBar!!.title = "Settings"
+                currentTitle.value = "Settings"
+                currentFragment.value = PayoutFragment()
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -37,20 +45,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkAndLoadFragment(fragment: Fragment) {
-        val savedFragment = supportFragmentManager.findFragmentByTag(fragment::class.java.name)
-        if (savedFragment != null) {
-            loadFragment(savedFragment)
-            Log.d("---->", "Loading fragment from stack ${fragment::class.java}")
-        } else {
+        if (currentTitle.value != title) {
             loadFragment(fragment)
         }
     }
 
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment, fragment::class.java.name)
-            .addToBackStack(null)
-            .commit()
+                .replace(R.id.container, fragment, fragment::class.java.name)
+                .addToBackStack(null)
+                .commit()
+        //title = currentTitle.value!!
     }
 
 
@@ -59,6 +64,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+        currentFragment.value = HomeFragment()
+
+        currentTitle.observe(this, Observer {
+            supportActionBar!!.title = it!!
+        })
+
+        currentFragment.observe(this, Observer {
+            checkAndLoadFragment(it!!)
+        })
+
     }
 
 }

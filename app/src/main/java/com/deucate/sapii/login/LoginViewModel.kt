@@ -3,6 +3,7 @@ package com.deucate.sapii.login
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.deucate.sapii.Constants
+import com.deucate.sapii.util.Utils
 import com.google.firebase.firestore.FirebaseFirestore
 import java.lang.NullPointerException
 
@@ -30,20 +31,21 @@ class LoginViewModel : ViewModel() {
     fun addReferralCode(referralCode: String) {
         val notExistsError = "Not found referral code."
 
-        db.collection(constants.Path_Users).whereEqualTo(constants.Referral_Code, referralCode).get().addOnCompleteListener {
-            if (it.isSuccessful) {
-                for (doc in it.result!!) {
-                    val updatedPoint = try {
-                        doc.getLong(constants.points)!!.toInt() + constants.Referral_Point
-                    } catch (e: NullPointerException) {
-                        constants.Referral_Point
+        db.collection(constants.Path_Users).whereEqualTo(constants.Referral_Code, referralCode).get()
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    for (doc in it.result!!) {
+                        val updatedPoint = try {
+                            doc.getLong(constants.points)!!.toInt() + constants.Referral_Point
+                        } catch (e: NullPointerException) {
+                            constants.Referral_Point
+                        }
+                        addThePoints(doc.id, updatedPoint)
                     }
-                    addThePoints(doc.id, updatedPoint)
+                } else {
+                    error.value = notExistsError
                 }
-            } else {
-                error.value = notExistsError
             }
-        }
     }
 
     private fun addThePoints(uid: String, points: Int) {
@@ -58,6 +60,14 @@ class LoginViewModel : ViewModel() {
             }
         }
 
+    }
+
+    fun addNewData(data: java.util.HashMap<String, Any?>) {
+        db.collection(constants.Path_Users).add(data).addOnCompleteListener {
+            if (!it.isSuccessful) {
+                error.value = it.exception!!.localizedMessage
+            }
+        }
     }
 
 }

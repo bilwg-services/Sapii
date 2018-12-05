@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="2dp"
-    android:layout_marginBottom="2dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
     android:orientation="vertical"
     app:cardCornerRadius="4dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
@@ -25,34 +25,32 @@
             app:srcCompat="@drawable/ic_android_black_24dp"
             tools:ignore="ContentDescription" />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:singleLine="true"
-            android:text="@string/app_name"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="18sp"
-            app:layout_constraintStart_toEndOf="@+id/image"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="4dp"
-            android:singleLine="true"
-            android:text="@string/long_text"
-            android:textColor="@color/colorSecondaryText"
-            android:textSize="18sp"
-            app:layout_constraintStart_toEndOf="@+id/image"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@string/app_name"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="18sp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@string/long_text"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="16sp" />
+        </LinearLayout>
 
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

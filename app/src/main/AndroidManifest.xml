@@ -21,7 +21,12 @@
         <activity
                 android:name=".MainActivity"
                 android:label="@string/title_home"/>
-        <activity android:name=".spinner.SpinActivity">
+        <activity android:name=".spinner.SpinActivity"/>
+        <activity android:name=".scatch.ScratchActivity"/>
+        <activity android:name=".video.VideoActivity"/>
+        <activity android:name=".facebook.FacebookActivity">
+        </activity>
+        <activity android:name=".invite.InviteActivity">
         </activity>
     </application>
 

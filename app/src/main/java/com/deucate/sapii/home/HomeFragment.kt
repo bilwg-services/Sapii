@@ -11,10 +11,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.deucate.sapii.invite.InviteActivity
 import com.deucate.sapii.R
+import com.deucate.sapii.video.VideoActivity
+import com.deucate.sapii.scatch.ScratchActivity
 import com.deucate.sapii.spinner.SpinActivity
 import com.deucate.sapii.util.Utils
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import com.deucate.sapii.facebook.FacebookActivity
+
 
 class HomeFragment : Fragment() {
 
@@ -44,7 +49,9 @@ class HomeFragment : Fragment() {
             adapter.notifyDataSetChanged()
         })
 
-        addModule()
+        if (viewModel.modules.value!!.size == 0) {
+            addModule()
+        }
 
         viewModel.activityToStart.observe(this, Observer {
             activity!!.startActivity(it)
@@ -75,15 +82,15 @@ class HomeFragment : Fragment() {
                 "Scratch to earn credits",
                 "Per hour get unlimited points with scratch..",
                 R.drawable.scartch_icon,
-                SpinActivity::class.java as Class<*>
+                ScratchActivity::class.java as Class<*>
             )
         )
         viewModel.modules.value!!.add(
             Module(
                 "Watch video",
                 "Every 30 min to watch full video and get full credit.",
-                R.drawable.spin_win,
-                SpinActivity::class.java as Class<*>
+                R.drawable.video,
+                VideoActivity::class.java as Class<*>
             )
         )
 
@@ -91,8 +98,8 @@ class HomeFragment : Fragment() {
             Module(
                 "Share to earn credit",
                 "Every share get 30 credit",
-                R.drawable.spin_win,
-                SpinActivity::class.java as Class<*>
+                R.drawable.credit_bag,
+                InviteActivity::class.java as Class<*>
             )
         )
 
@@ -100,8 +107,8 @@ class HomeFragment : Fragment() {
             Module(
                 "Share on Facebook Timeline",
                 "Share on Facebook with your friends",
-                R.drawable.spin_win,
-                SpinActivity::class.java as Class<*>
+                R.drawable.facebook,
+                FacebookActivity::class.java as Class<*>
             )
         )
     }

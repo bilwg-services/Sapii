@@ -10,4 +10,9 @@ class Constants {
     //User
     val points = "Points"
 
+    //User_Data
+    val user_name = "Name"
+    val contact = "Contact"
+    val inviteID = "InviteID"
+
 }
