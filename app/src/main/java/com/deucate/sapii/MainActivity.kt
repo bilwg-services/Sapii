@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.deucate.sapii.home.HomeFragment
 import com.deucate.sapii.invite.InviteFragment
 import com.deucate.sapii.payout.PayoutFragment
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private val currentFragment = MutableLiveData<Fragment?>()
     private val currentTitle = MutableLiveData<String?>()
     private var title = String()
+    private val constants = Constants()
 
     @SuppressLint("InflateParams")
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -60,9 +62,7 @@ class MainActivity : AppCompatActivity() {
         //title = currentTitle.value!!
     }
 
-    fun updatePoints(point: Int) {
-        FirebaseFirestore.getInstance().collection(Constants().Path_Users).document(FirebaseAuth.getInstance().uid!!).update(Constants().points, point)
-    }
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +70,13 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+
         currentFragment.value = HomeFragment()
+
+        viewModel.points.observe(this, Observer {
+            FirebaseFirestore.getInstance().collection(constants.Path_Users).document(FirebaseAuth.getInstance().uid!!).update(constants.points, it)
+        })
 
         currentTitle.observe(this, Observer {
             supportActionBar!!.title = it!!
@@ -79,7 +85,11 @@ class MainActivity : AppCompatActivity() {
         currentFragment.observe(this, Observer {
             checkAndLoadFragment(it!!)
         })
+    }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getPoints()
     }
 
 }

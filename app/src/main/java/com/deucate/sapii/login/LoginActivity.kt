@@ -105,7 +105,7 @@ class LoginActivity : AppCompatActivity() {
         data[constants.contact] = contact
         data[constants.points] = 0
 
-        viewModel.addNewData(data)
+        viewModel.addNewData(data,auth.uid!!)
     }
 
     private fun startHomeActivity() {

@@ -3,7 +3,6 @@ package com.deucate.sapii.login
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.deucate.sapii.Constants
-import com.deucate.sapii.util.Utils
 import com.google.firebase.firestore.FirebaseFirestore
 import java.lang.NullPointerException
 
@@ -60,8 +59,8 @@ class LoginViewModel : ViewModel() {
 
     }
 
-    fun addNewData(data: java.util.HashMap<String, Any?>) {
-        db.collection(constants.Path_Users).add(data).addOnCompleteListener {
+    fun addNewData(data: java.util.HashMap<String, Any?>, uid: String) {
+        db.collection(constants.Path_Users).document(uid).set(data).addOnCompleteListener {
             if (!it.isSuccessful) {
                 error.value = it.exception!!.localizedMessage
             }

@@ -4,9 +4,16 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProviders
+import com.deucate.sapii.Constants
 import com.deucate.sapii.MainActivity
+import com.deucate.sapii.MainViewModel
 import com.deucate.sapii.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_spin.*
+import org.koin.android.architecture.ext.viewModel
 import rubikstudio.library.LuckyWheelView
 import rubikstudio.library.model.LuckyItem
 import java.util.*
@@ -16,6 +23,8 @@ class SpinActivity : AppCompatActivity() {
 
     private val colors = ArrayList<String>()
     private val drawables = ArrayList<Int>()
+
+    private lateinit var viewModel: MainViewModel
 
     init {
         colors.add("#FFE0B2")
@@ -39,9 +48,13 @@ class SpinActivity : AppCompatActivity() {
         drawables.add(R.drawable.test9)
     }
 
+    private val constants = Constants()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_spin)
+
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         val luckyWheelView = findViewById<View>(R.id.luckyWheel) as LuckyWheelView
         val data = ArrayList<LuckyItem>()
@@ -56,9 +69,12 @@ class SpinActivity : AppCompatActivity() {
         luckyWheelView.setRound(4)
         luckyWheelView.setLuckyRoundItemSelectedListener {
             val point = it * 10
-            val parent = parent as MainActivity
-            parent.updatePoints(point)
+            viewModel.points.value = viewModel.points.value!!.toInt() + point
         }
+
+        viewModel.points.observe(this, androidx.lifecycle.Observer {
+            FirebaseFirestore.getInstance().collection(constants.Path_Users).document(FirebaseAuth.getInstance().uid!!).update(constants.points, it)
+        })
 
         spinStartBtn.setOnClickListener {
             val randomNumber = Random().nextInt(8)
