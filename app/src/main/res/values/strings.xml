@@ -12,4 +12,6 @@
     <string name="flat_200">Flat 200</string>
     <string name="start">Start</string>
     <string name="scratch_card">Scratch Card</string>
+    <string name="share_app">share app</string>
+    <string name="invite_code">Invite code</string>
 </resources>
