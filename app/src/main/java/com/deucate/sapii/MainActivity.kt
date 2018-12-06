@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
     private val currentFragment = MutableLiveData<Fragment?>()
     private val currentTitle = MutableLiveData<String?>()
     private var title = String()
-    private val constants = Constants()
 
     @SuppressLint("InflateParams")
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -59,10 +58,9 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.container, fragment, fragment::class.java.name)
                 .addToBackStack(null)
                 .commit()
-        //title = currentTitle.value!!
     }
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,12 +68,12 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(ViewModel::class.java)
 
         currentFragment.value = HomeFragment()
 
         viewModel.points.observe(this, Observer {
-            FirebaseFirestore.getInstance().collection(constants.Path_Users).document(FirebaseAuth.getInstance().uid!!).update(constants.points, it)
+            viewModel.updatePoints(it!!)
         })
 
         currentTitle.observe(this, Observer {
