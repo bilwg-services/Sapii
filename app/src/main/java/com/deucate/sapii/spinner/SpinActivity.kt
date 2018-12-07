@@ -1,13 +1,12 @@
 package com.deucate.sapii.spinner
 
 import android.app.Activity
-import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import com.deucate.sapii.Constants
+import com.deucate.sapii.util.Constants
 import com.deucate.sapii.R
 import com.deucate.sapii.ViewModel
 import com.google.firebase.auth.FirebaseAuth

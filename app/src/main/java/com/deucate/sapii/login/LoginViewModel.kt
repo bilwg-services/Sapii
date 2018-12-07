@@ -2,7 +2,7 @@ package com.deucate.sapii.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.deucate.sapii.Constants
+import com.deucate.sapii.util.Constants
 import com.google.firebase.firestore.FirebaseFirestore
 import java.lang.NullPointerException
 

@@ -50,15 +50,15 @@ dependencies {
 
     //Firebase
     implementation 'com.google.firebase:firebase-auth:16.0.5'
-
-    //implementation 'com.google.firebase:firebase-ads:17.1.1'
     implementation 'com.google.firebase:firebase-firestore:17.1.3'
     implementation project(path: ':spinLibrary')
 
     //Multidex
     implementation 'com.android.support:multidex:1.0.3'
 
-    //Scratch view
+    //Others
     implementation 'com.github.cooltechworks:ScratchView:v1.1'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:1.2.2'
 
 }

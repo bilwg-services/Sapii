@@ -34,10 +34,10 @@
 
         <com.cooltechworks.views.ScratchTextView
             android:id="@+id/scratchCardView"
-            android:textAlignment="center"
-            android:textSize="32sp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:textSize="32sp" />
 
     </androidx.cardview.widget.CardView>
 
@@ -53,17 +53,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/scratchTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="New card will be available after 29 minutes"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle"
-        android:visibility="invisible"
+    <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
+        app:formattingPattern="&#37;.0f min"
+        android:id="@+id/timeRemainProcess"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:direction="counterclockwise"
+        app:drawDot="true"
+        app:progressCap="round"
+        app:enableProgressAnimation="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

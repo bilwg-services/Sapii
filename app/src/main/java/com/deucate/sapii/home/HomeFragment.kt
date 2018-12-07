@@ -1,7 +1,6 @@
 package com.deucate.sapii.home
 
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.deucate.sapii.Constants
+import com.deucate.sapii.util.Constants
 import com.deucate.sapii.invite.InviteActivity
 import com.deucate.sapii.R
 import com.deucate.sapii.ViewModel
@@ -22,7 +21,6 @@ import com.deucate.sapii.spinner.SpinActivity
 import com.deucate.sapii.util.Utils
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import com.deucate.sapii.facebook.FacebookActivity
-import java.lang.NullPointerException
 
 
 class HomeFragment : Fragment() {
@@ -34,10 +32,16 @@ class HomeFragment : Fragment() {
     private val constants = Constants()
 
     companion object {
-        const val requestCode = 100
+        const val defaultRequestCode = 100
+        const val spinRequestCode = 101
+        const val scrarchRequestCode = 102
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val rootView = inflater.inflate(R.layout.fragment_home, container, false)
         utils = Utils(activity as Context)
 
@@ -46,9 +50,17 @@ class HomeFragment : Fragment() {
         val adapter = ModuleAdapter(homeViewModel)
         adapter.listner = object : ModuleAdapter.OnCallBack {
             override fun onClickCard(module: Module) {
+
                 val intent = Intent(activity, module.intent)
                 intent.putExtra(constants.points, viewModel.points.value)
-                startActivityForResult(intent, requestCode)
+                var code = defaultRequestCode
+
+                when (module.title) {
+                    "Scratch to earn credits" -> code = scrarchRequestCode
+                    "Spin to earn credits" -> code = spinRequestCode
+                }
+                startActivityForResult(intent, code)
+
             }
 
         }
@@ -82,46 +94,46 @@ class HomeFragment : Fragment() {
 
     private fun addModule() {
         homeViewModel.modules.value!!.add(
-                Module(
-                        "Spin to earn credits",
-                        "Per hour get unlimited points with spins.",
-                        R.drawable.spin_win,
-                        SpinActivity::class.java as Class<*>
-                )
+            Module(
+                "Spin to earn credits",
+                "Per hour get unlimited points with spins.",
+                R.drawable.spin_win,
+                SpinActivity::class.java as Class<*>
+            )
         )
         homeViewModel.modules.value!!.add(
-                Module(
-                        "Scratch to earn credits",
-                        "Per hour get unlimited points with scratch..",
-                        R.drawable.scartch_icon,
-                        ScratchActivity::class.java as Class<*>
-                )
+            Module(
+                "Scratch to earn credits",
+                "Per hour get unlimited points with scratch..",
+                R.drawable.scartch_icon,
+                ScratchActivity::class.java as Class<*>
+            )
         )
         homeViewModel.modules.value!!.add(
-                Module(
-                        "Watch video",
-                        "Every 30 min to watch full video and get full credit.",
-                        R.drawable.video,
-                        VideoActivity::class.java as Class<*>
-                )
-        )
-
-        homeViewModel.modules.value!!.add(
-                Module(
-                        "Share to earn credit",
-                        "Every share get 30 credit",
-                        R.drawable.credit_bag,
-                        InviteActivity::class.java as Class<*>
-                )
+            Module(
+                "Watch video",
+                "Every 30 min to watch full video and get full credit.",
+                R.drawable.video,
+                VideoActivity::class.java as Class<*>
+            )
         )
 
         homeViewModel.modules.value!!.add(
-                Module(
-                        "Share on Facebook Timeline",
-                        "Share on Facebook with your friends",
-                        R.drawable.facebook,
-                        FacebookActivity::class.java as Class<*>
-                )
+            Module(
+                "Share to earn credit",
+                "Every share get 30 credit",
+                R.drawable.credit_bag,
+                InviteActivity::class.java as Class<*>
+            )
+        )
+
+        homeViewModel.modules.value!!.add(
+            Module(
+                "Share on Facebook Timeline",
+                "Share on Facebook with your friends",
+                R.drawable.facebook,
+                FacebookActivity::class.java as Class<*>
+            )
         )
     }
 
@@ -133,12 +145,12 @@ class HomeFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            requestCode -> {
-                try {
-                    viewModel.points.value = data!!.getLongExtra(constants.points, viewModel.points.value!!)
-                } catch (e: KotlinNullPointerException) {
-                    e.printStackTrace()
-                }
+            spinRequestCode -> viewModel.points.value =
+                    data!!.getLongExtra(constants.points, viewModel.points.value!!)
+            scrarchRequestCode -> {
+                viewModel.points.value =
+                        data!!.getLongExtra(constants.points, viewModel.points.value!!)
+                viewModel.updateLastTime()
             }
         }
     }

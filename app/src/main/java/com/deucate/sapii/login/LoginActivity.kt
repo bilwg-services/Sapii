@@ -8,7 +8,7 @@ import android.text.TextUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.deucate.sapii.Constants
+import com.deucate.sapii.util.Constants
 import com.deucate.sapii.MainActivity
 import com.deucate.sapii.R
 import com.deucate.sapii.util.Utils

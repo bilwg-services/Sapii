@@ -1,4 +1,4 @@
-package com.deucate.sapii
+package com.deucate.sapii.util
 
 class Constants {
     val Referral_Code = "ReferralCode"
@@ -14,5 +14,6 @@ class Constants {
     val user_name = "Name"
     val contact = "Contact"
     val inviteID = "InviteID"
-
+    val lifeTimeEarning = "LifeTimeEarning"
+    val lastTime = "LastTime"
 }

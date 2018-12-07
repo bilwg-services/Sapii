@@ -14,4 +14,8 @@
     <string name="scratch_card">Scratch Card</string>
     <string name="share_app">share app</string>
     <string name="invite_code">Invite code</string>
+    <string name="additional_settings">Additional Settings</string>
+    <string name="logout">Logout</string>
+    <string name="your_points">Your points</string>
+    <string name="lifetime_earning">Lifetime Earning</string>
 </resources>

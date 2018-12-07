@@ -2,6 +2,8 @@ package com.deucate.sapii
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.deucate.sapii.util.Constants
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -16,17 +18,24 @@ class ViewModel : ViewModel() {
     }
 
     fun updatePoints(point: Long) {
-        FirebaseFirestore.getInstance().collection(constants.Path_Users).document(FirebaseAuth.getInstance().uid!!).update(constants.points, point)
+        FirebaseFirestore.getInstance().collection(constants.Path_Users)
+            .document(FirebaseAuth.getInstance().uid!!).update(constants.points, point)
     }
 
     fun getPoints() {
-        FirebaseFirestore.getInstance().collection(constants.Path_Users).document(FirebaseAuth.getInstance().uid!!).get().addOnCompleteListener {
+        FirebaseFirestore.getInstance().collection(constants.Path_Users)
+            .document(FirebaseAuth.getInstance().uid!!).get().addOnCompleteListener {
             if (it.isSuccessful) {
                 val point = it.result!!.getLong(constants.points)!!.toLong()
                 if (points.value != point)
                     points.value = point
             }
         }
+    }
+
+    fun updateLastTime() {
+        FirebaseFirestore.getInstance().collection(constants.Path_Users)
+            .document(FirebaseAuth.getInstance().uid!!).update(constants.lastTime, Timestamp.now())
     }
 
 
